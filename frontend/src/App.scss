@@ -141,3 +141,128 @@ body {
   margin: 0;
   padding: 0;
 }
+
+// Custom styles for PrimeReact input fields to match theme
+form .p-inputtext,
+form .p-password-input {
+  background-color: var(--input-bg) !important;
+  color: var(--input-color) !important;
+  border-color: var(--input-border) !important;
+  transition: all 0.2s ease !important;
+}
+
+form .p-inputtext:focus,
+form .p-password-input:focus {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+}
+
+form .p-password {
+  background-color: var(--input-bg) !important;
+}
+
+form .p-password .p-password-input {
+  background-color: var(--input-bg) !important;
+  color: var(--input-color) !important;
+}
+
+form .p-password .p-password-toggle {
+  color: var(--input-color) !important;
+}
+
+form .p-password .p-password-toggle:hover {
+  color: #007bff !important;
+}
+
+// Ensure consistent width for all input fields
+form .p-inputtext,
+form .p-password {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+// Target the password input specifically to match username input width
+form .p-password-input {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
+}
+
+form .p-password .p-password-input {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
+}
+
+form .p-password .p-password-input-wrapper {
+  width: 100% !important;
+  min-width: 100% !important;
+  display: flex !important;
+  box-sizing: border-box !important;
+}
+
+form .p-password .p-password-input-wrapper input {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
+}
+
+// Ensure both input types have identical sizing
+form input[type="text"],
+form input[type="password"] {
+  width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+// Make password wrapper match username input exactly
+form .p-password {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+// Ensure password input field matches username input field exactly
+form .p-password .p-password-input,
+form .p-password-input {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  height: 1rem !important;
+  min-height: 1rem !important;
+}
+
+// Ensure username input field has same dimensions
+form .p-inputtext {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  height: 1rem !important;
+  min-height: 1rem !important;
+}
+
+// Custom button styling
+form .p-button {
+  transition: all 0.2s ease !important;
+}
+
+form .p-button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+form .p-button:active {
+  transform: translateY(0) !important;
+}

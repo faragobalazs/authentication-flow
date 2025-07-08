@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
@@ -17,6 +17,14 @@ function App() {
     setIsDark(!isDark);
   };
 
+  // Update document root data-theme attribute when theme changes
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDark ? "dark" : "light"
+    );
+  }, [isDark]);
+
   const themeStyles = {
     dark: {
       background: "#1a1a1a",
@@ -24,7 +32,7 @@ function App() {
       textColor: "#ffffff",
       headerText: "#ffffff",
       footerText: "#cccccc",
-      shadow: "0 4px 20px rgba(120, 120, 120, 0.1",
+      shadow: "0 4px 20px rgba(130, 130, 130, 0.25",
     },
     light: {
       background: "#ffffff",
@@ -42,6 +50,7 @@ function App() {
     <div
       className="flex flex-column min-h-screen w-full"
       style={{ background: currentTheme.background }}
+      data-theme={isDark ? "dark" : "light"}
     >
       {/* Header */}
       <header
@@ -81,8 +90,12 @@ function App() {
           style={{
             minWidth: 320,
             maxWidth: 360,
-            background: currentTheme.background,
+            background: currentTheme.formBg,
             boxShadow: currentTheme.shadow,
+            "--input-bg": currentTheme.formBg,
+            "--input-color": currentTheme.textColor,
+            "--input-border":
+              currentTheme.formBg === "#ffffff" ? "#e0e0e0" : "#666666",
           }}
           onSubmit={(e) => e.preventDefault()}
         >
@@ -108,7 +121,7 @@ function App() {
               autoComplete="username"
             />
           </div>
-          <div className="field mb-4">
+          <div className="field mb-3">
             <label
               htmlFor="password"
               className="block mb-2"
@@ -122,11 +135,34 @@ function App() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full"
               feedback={false}
-              toggleMask
+              toggleMask={false}
               autoComplete="current-password"
             />
           </div>
-          <Button label="Login" className="w-full" type="submit" />
+          <Button
+            label="Login"
+            className="w-full mb-3"
+            type="submit"
+            style={{
+              backgroundColor: "transparent",
+              color: currentTheme.textColor,
+              borderColor: currentTheme.textColor,
+              borderWidth: "1px",
+              borderStyle: "solid",
+            }}
+          />
+          <Button
+            label="Register"
+            className="w-full mb-3"
+            type="button"
+            style={{
+              backgroundColor: "transparent",
+              color: currentTheme.textColor,
+              borderColor: currentTheme.textColor,
+              borderWidth: "1px",
+              borderStyle: "solid",
+            }}
+          />
         </form>
       </main>
       {/* Footer */}
@@ -138,7 +174,7 @@ function App() {
           color: currentTheme.footerText,
         }}
       >
-        <span>&copy; {new Date().getFullYear()} AuthFlow</span>
+        <span>&copy; {new Date().getFullYear()} Balazs Farago</span>
       </footer>
     </div>
   );
