@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
+import RegisterSuccess from "./pages/RegisterSuccess";
+import LoginSuccess from "./pages/LoginSuccess";
 import Home from "./pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import "primeflex/primeflex.css";
@@ -37,11 +39,6 @@ function LoginForm({
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
 
-  // If already logged in, redirect
-  if (localStorage.getItem("isLoggedIn") === "true") {
-    return <Navigate to="/home" replace />;
-  }
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -57,7 +54,7 @@ function LoginForm({
       if (res.ok) {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/home");
+        navigate("/login-success");
       } else {
         setError(data.error || "Login failed");
       }
@@ -98,12 +95,7 @@ function LoginForm({
       });
       const data = await res.json();
       if (res.ok) {
-        setSuccess("You have successfully registered.");
-        // Clear form
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        setIsRegistering(false);
+        navigate("/register-success");
       } else {
         setError(data.error || "Something went wrong. Try again.");
       }
@@ -137,7 +129,11 @@ function LoginForm({
           color: currentTheme.headerText,
         }}
       >
-        <div className="flex align-items-center">
+        <div
+          className="flex align-items-center cursor-pointer"
+          onClick={() => navigate("/home")}
+          style={{ cursor: "pointer" }}
+        >
           <i className="pi pi-lock mr-2" style={{ fontSize: "1.5rem" }}></i>
           <span className="font-bold text-lg">Jordan Apps | AuthFlow</span>
         </div>
@@ -181,6 +177,20 @@ function LoginForm({
           >
             {isRegistering ? "Register" : "Login"}
           </h2>
+          {success && (
+            <div
+              style={{ color: "green", marginBottom: 16, textAlign: "center" }}
+            >
+              {success}
+            </div>
+          )}
+          {error && (
+            <div
+              style={{ color: "red", marginBottom: 16, textAlign: "center" }}
+            >
+              {error}
+            </div>
+          )}
           <div className="field mb-3">
             <label
               htmlFor="username"
@@ -255,18 +265,6 @@ function LoginForm({
               borderStyle: "solid",
             }}
           />
-          {error && (
-            <div style={{ color: "red", marginBottom: 8, textAlign: "center" }}>
-              {error}
-            </div>
-          )}
-          {success && (
-            <div
-              style={{ color: "green", marginBottom: 8, textAlign: "center" }}
-            >
-              {success}
-            </div>
-          )}
           <Button
             label={isRegistering ? "Back to Login" : "Register"}
             className="w-full mb-3"
@@ -280,26 +278,12 @@ function LoginForm({
               borderStyle: "solid",
             }}
           />
-          <div className="flex gap-2">
+          <div style={{ textAlign: "center" }}>
             <Button
               label="Forgot Password"
-              className="flex-1"
               type="button"
+              className="w-full"
               onClick={() => navigate("/forgot-password")}
-              style={{
-                backgroundColor: "transparent",
-                color: currentTheme.textColor,
-                borderColor: currentTheme.textColor,
-                borderWidth: "1px",
-                borderStyle: "solid",
-                fontSize: "0.875rem",
-              }}
-            />
-            <Button
-              label="Reset Password"
-              className="flex-1"
-              type="button"
-              onClick={() => navigate("/reset-password")}
               style={{
                 backgroundColor: "transparent",
                 color: currentTheme.textColor,
@@ -374,13 +358,55 @@ function App() {
             />
           }
         />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/forgot-password"
+          element={
+            <ForgotPassword
+              currentTheme={currentTheme}
+              isDark={isDark}
+              toggleTheme={toggleTheme}
+            />
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <ResetPassword
+              currentTheme={currentTheme}
+              isDark={isDark}
+              toggleTheme={toggleTheme}
+            />
+          }
+        />
+        <Route
+          path="/register-success"
+          element={
+            <RegisterSuccess
+              currentTheme={currentTheme}
+              isDark={isDark}
+              toggleTheme={toggleTheme}
+            />
+          }
+        />
+        <Route
+          path="/login-success"
+          element={
+            <LoginSuccess
+              currentTheme={currentTheme}
+              isDark={isDark}
+              toggleTheme={toggleTheme}
+            />
+          }
+        />
         <Route
           path="/home"
           element={
             <ProtectedRoute>
-              <Home />
+              <Home
+                currentTheme={currentTheme}
+                isDark={isDark}
+                toggleTheme={toggleTheme}
+              />
             </ProtectedRoute>
           }
         />

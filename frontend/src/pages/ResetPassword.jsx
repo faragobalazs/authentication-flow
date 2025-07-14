@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 
-export default function ResetPassword() {
+export default function ResetPassword({ currentTheme, isDark, toggleTheme }) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
@@ -60,92 +60,116 @@ export default function ResetPassword() {
     }
   }
 
-  if (status === "verifying") {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#f5f5f5",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>Verifying token...</div>
-      </div>
-    );
-  }
+  const renderContent = () => {
+    if (status === "verifying") {
+      return (
+        <div
+          className="p-4 border-round-lg surface-card"
+          style={{
+            background: currentTheme.formBg,
+            boxShadow: currentTheme.shadow,
+            textAlign: "center",
+            color: currentTheme.textColor,
+          }}
+        >
+          Verifying token...
+        </div>
+      );
+    }
 
-  if (status === "invalid") {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#f5f5f5",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
+    if (status === "invalid") {
+      return (
+        <div
+          className="p-4 border-round-lg surface-card"
+          style={{
+            background: currentTheme.formBg,
+            boxShadow: currentTheme.shadow,
+            textAlign: "center",
+            color: currentTheme.textColor,
+          }}
+        >
           <div style={{ color: "red", marginBottom: "1rem" }}>{message}</div>
-          <Button label="Back to Login" onClick={() => navigate("/")} />
+          <Button
+            label="Back to Login"
+            onClick={() => navigate("/")}
+            style={{
+              backgroundColor: "transparent",
+              color: currentTheme.textColor,
+              borderColor: currentTheme.textColor,
+              borderWidth: "1px",
+              borderStyle: "solid",
+            }}
+          />
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (status === "done") {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#f5f5f5",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
+    if (status === "done") {
+      return (
+        <div
+          className="p-4 border-round-lg surface-card"
+          style={{
+            background: currentTheme.formBg,
+            boxShadow: currentTheme.shadow,
+            textAlign: "center",
+            color: currentTheme.textColor,
+          }}
+        >
           <div style={{ color: "green", marginBottom: "1rem" }}>{message}</div>
-          <Button label="Go to Login" onClick={() => navigate("/")} />
+          <Button
+            label="Go to Login"
+            onClick={() => navigate("/")}
+            style={{
+              backgroundColor: "transparent",
+              color: currentTheme.textColor,
+              borderColor: currentTheme.textColor,
+              borderWidth: "1px",
+              borderStyle: "solid",
+            }}
+          />
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#f5f5f5",
-      }}
-    >
+    return (
       <form
         onSubmit={handleReset}
+        className="p-4 border-round-lg surface-card"
         style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          background: currentTheme.formBg,
+          boxShadow: currentTheme.shadow,
           width: "100%",
           maxWidth: "400px",
+          "--input-bg": currentTheme.formBg,
+          "--input-color": currentTheme.textColor,
+          "--input-border":
+            currentTheme.formBg === "#ffffff" ? "#e0e0e0" : "#666666",
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "2rem",
+            color: currentTheme.textColor,
+          }}
+        >
           Reset Password
         </h2>
-        <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+        <div
+          style={{
+            marginBottom: "1rem",
+            textAlign: "center",
+            color: currentTheme.textColor,
+          }}
+        >
           Account: <b>{email}</b>
         </div>
 
-        <div style={{ marginBottom: "1.5rem" }}>
+        <div className="field mb-3">
           <label
             htmlFor="newPassword"
-            style={{ display: "block", marginBottom: "0.5rem" }}
+            className="block mb-2"
+            style={{ color: currentTheme.textColor }}
           >
             New Password
           </label>
@@ -163,8 +187,14 @@ export default function ResetPassword() {
         <Button
           label="Set New Password"
           type="submit"
-          className="w-full"
-          style={{ marginBottom: "1rem" }}
+          className="w-full mb-3"
+          style={{
+            backgroundColor: "transparent",
+            color: currentTheme.textColor,
+            borderColor: currentTheme.textColor,
+            borderWidth: "1px",
+            borderStyle: "solid",
+          }}
         />
 
         {message && (
@@ -181,9 +211,73 @@ export default function ResetPassword() {
             type="button"
             link
             onClick={() => navigate("/")}
+            style={{
+              color: currentTheme.textColor,
+            }}
           />
         </div>
       </form>
+    );
+  };
+
+  return (
+    <div
+      className="flex flex-column min-h-screen w-full"
+      style={{ background: currentTheme.background }}
+      data-theme={isDark ? "dark" : "light"}
+    >
+      {/* Header */}
+      <header
+        className="flex align-items-center justify-content-between w-full px-4"
+        style={{
+          height: "50px",
+          background: currentTheme.background,
+          color: currentTheme.headerText,
+        }}
+      >
+        <div
+          className="flex align-items-center cursor-pointer"
+          onClick={() => navigate("/home")}
+          style={{ cursor: "pointer" }}
+        >
+          <i className="pi pi-lock mr-2" style={{ fontSize: "1.5rem" }}></i>
+          <span className="font-bold text-lg">Jordan Apps | AuthFlow</span>
+        </div>
+        <button
+          onClick={toggleTheme}
+          className="flex align-items-center justify-content-center"
+          style={{
+            background: "none",
+            border: "none",
+            outline: "none",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+            color: currentTheme.headerText,
+          }}
+        >
+          <i className={isDark ? "pi pi-sun" : "pi pi-moon"}></i>
+        </button>
+      </header>
+
+      {/* Main Content */}
+      <main
+        className="flex flex-1 align-items-center justify-content-center w-full"
+        style={{ background: currentTheme.background }}
+      >
+        {renderContent()}
+      </main>
+
+      {/* Footer */}
+      <footer
+        className="flex align-items-center justify-content-center w-full"
+        style={{
+          height: "35px",
+          background: currentTheme.background,
+          color: currentTheme.footerText,
+        }}
+      >
+        <span>&copy; {new Date().getFullYear()} Balazs Farago</span>
+      </footer>
     </div>
   );
 }

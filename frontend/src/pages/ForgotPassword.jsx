@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
-export default function ForgotPassword() {
+export default function ForgotPassword({ currentTheme, isDark, toggleTheme }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -25,10 +25,6 @@ export default function ForgotPassword() {
       const data = await res.json();
       if (res.ok) {
         setSuccess("Password reset email sent! Check your inbox.");
-        // In development mode, show the reset URL
-        if (data.resetUrl) {
-          setSuccess(`Password reset email sent! Reset URL: ${data.resetUrl}`);
-        }
       } else {
         setError(data.error || "Failed to send reset email");
       }
@@ -40,88 +36,169 @@ export default function ForgotPassword() {
 
   return (
     <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#f5f5f5",
-      }}
+      className="flex flex-column min-h-screen w-full"
+      style={{ background: currentTheme.background }}
+      data-theme={isDark ? "dark" : "light"}
     >
-      <form
-        onSubmit={handleSubmit}
+      {/* Header */}
+      <header
+        className="flex align-items-center justify-content-between w-full px-4"
         style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-          width: "100%",
-          maxWidth: "400px",
+          height: "50px",
+          background: currentTheme.background,
+          color: currentTheme.headerText,
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
-          Forgot Password
-        </h2>
-
-        <p style={{ textAlign: "center", marginBottom: "2rem", color: "#666" }}>
-          Enter your email address and we'll send you a link to reset your
-          password.
-        </p>
-
-        <div style={{ marginBottom: "1.5rem" }}>
-          <label
-            htmlFor="email"
-            style={{ display: "block", marginBottom: "0.5rem" }}
-          >
-            Email
-          </label>
-          <InputText
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-            required
-          />
+        <div
+          className="flex align-items-center cursor-pointer"
+          onClick={() => navigate("/home")}
+          style={{ cursor: "pointer" }}
+        >
+          <i className="pi pi-lock mr-2" style={{ fontSize: "1.5rem" }}></i>
+          <span className="font-bold text-lg">Jordan Apps | AuthFlow</span>
         </div>
+        <button
+          onClick={toggleTheme}
+          className="flex align-items-center justify-content-center"
+          style={{
+            background: "none",
+            border: "none",
+            outline: "none",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+            color: currentTheme.headerText,
+          }}
+        >
+          <i className={isDark ? "pi pi-sun" : "pi pi-moon"}></i>
+        </button>
+      </header>
 
-        {error && (
-          <div
-            style={{ color: "red", marginBottom: "1rem", textAlign: "center" }}
-          >
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div
+      {/* Main Content */}
+      <main
+        className="flex flex-1 align-items-center justify-content-center w-full"
+        style={{ background: currentTheme.background }}
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="p-4 border-round-lg surface-card"
+          style={{
+            background: currentTheme.formBg,
+            boxShadow: currentTheme.shadow,
+            width: "100%",
+            maxWidth: "400px",
+            "--input-bg": currentTheme.formBg,
+            "--input-color": currentTheme.textColor,
+            "--input-border":
+              currentTheme.formBg === "#ffffff" ? "#e0e0e0" : "#666666",
+          }}
+        >
+          <h2
             style={{
-              color: "green",
-              marginBottom: "1rem",
               textAlign: "center",
+              marginBottom: "1rem",
+              color: currentTheme.textColor,
             }}
           >
-            {success}
+            Forgot Password
+          </h2>
+
+          {success && (
+            <div
+              style={{
+                color: "green",
+                marginBottom: "1rem",
+                textAlign: "center",
+              }}
+            >
+              {success}
+            </div>
+          )}
+
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "2rem",
+              color:
+                currentTheme.textColor === "#ffffff" ? "#cccccc" : "#666666",
+            }}
+          >
+            Enter your email address and we'll send you a link to reset your
+            password.
+          </p>
+
+          <div className="field mb-3">
+            <label
+              htmlFor="email"
+              className="block mb-2"
+              style={{ color: currentTheme.textColor }}
+            >
+              Email
+            </label>
+            <InputText
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full"
+              required
+            />
           </div>
-        )}
 
-        <Button
-          label={loading ? "Sending..." : "Send Reset Email"}
-          type="submit"
-          className="w-full"
-          disabled={loading}
-          style={{ marginBottom: "1rem" }}
-        />
+          {error && (
+            <div
+              style={{
+                color: "red",
+                marginBottom: "1rem",
+                textAlign: "center",
+              }}
+            >
+              {error}
+            </div>
+          )}
 
-        <div style={{ textAlign: "center" }}>
           <Button
-            label="Back to Login"
-            type="button"
-            link
-            onClick={() => navigate("/")}
+            label={loading ? "Sending..." : "Send Reset Email"}
+            type="submit"
+            className="w-full mb-3"
+            disabled={loading}
+            style={{
+              backgroundColor: "transparent",
+              color: currentTheme.textColor,
+              borderColor: currentTheme.textColor,
+              borderWidth: "1px",
+              borderStyle: "solid",
+            }}
           />
-        </div>
-      </form>
+
+          <div style={{ textAlign: "center" }}>
+            <Button
+              label="Back to Login"
+              type="button"
+              className="w-full"
+              onClick={() => navigate("/")}
+              style={{
+                backgroundColor: "transparent",
+                color: currentTheme.textColor,
+                borderColor: currentTheme.textColor,
+                borderWidth: "1px",
+                borderStyle: "solid",
+              }}
+            />
+          </div>
+        </form>
+      </main>
+
+      {/* Footer */}
+      <footer
+        className="flex align-items-center justify-content-center w-full"
+        style={{
+          height: "35px",
+          background: currentTheme.background,
+          color: currentTheme.footerText,
+        }}
+      >
+        <span>&copy; {new Date().getFullYear()} Balazs Farago</span>
+      </footer>
     </div>
   );
 }

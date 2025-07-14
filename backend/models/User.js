@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  resetPasswordToken: {
+  resetToken: {
     type: String,
     default: null,
   },
-  resetPasswordExpires: {
+  resetTokenExpiry: {
     type: Date,
     default: null,
   },
@@ -44,6 +44,11 @@ userSchema.pre("save", async function (next) {
     next(err);
   }
 });
+
+// Method to compare passwords
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 const User = mongoose.model("User", userSchema);
 

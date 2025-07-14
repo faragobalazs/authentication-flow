@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
-export default function Home({ currentTheme, isDark, toggleTheme }) {
+export default function LoginSuccess({ currentTheme, isDark, toggleTheme }) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.username) setUsername(user.username);
-  }, []);
-
-  const handleLogout = () => {
+  const handleSignOut = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
-    navigate("/");
+    navigate("/?message=You have successfully logged out");
   };
 
   return (
@@ -70,26 +63,31 @@ export default function Home({ currentTheme, isDark, toggleTheme }) {
             maxWidth: 400,
           }}
         >
+          <div className="mb-4">
+            <i
+              className="pi pi-check-circle"
+              style={{
+                fontSize: "4rem",
+                color: "green",
+                marginBottom: "1rem",
+              }}
+            ></i>
+          </div>
+
           <h2
             style={{
               color: currentTheme.textColor,
-              marginBottom: "1rem",
-            }}
-          >
-            Welcome, {username || "User"}!
-          </h2>
-          <p
-            style={{
               marginBottom: "2rem",
-              color:
-                currentTheme.textColor === "#ffffff" ? "#cccccc" : "#666666",
+              fontSize: "1.5rem",
             }}
           >
-            You are logged in.
-          </p>
+            You have successfully logged in.
+          </h2>
+
           <Button
-            label="Logout"
-            onClick={handleLogout}
+            label="Sign Out"
+            className="w-full"
+            onClick={handleSignOut}
             style={{
               backgroundColor: "transparent",
               color: currentTheme.textColor,

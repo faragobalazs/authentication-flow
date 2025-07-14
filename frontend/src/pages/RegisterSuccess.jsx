@@ -1,21 +1,8 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
-export default function Home({ currentTheme, isDark, toggleTheme }) {
+export default function RegisterSuccess({ currentTheme, isDark, toggleTheme }) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.username) setUsername(user.username);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("user");
-    navigate("/");
-  };
 
   return (
     <div
@@ -70,26 +57,31 @@ export default function Home({ currentTheme, isDark, toggleTheme }) {
             maxWidth: 400,
           }}
         >
+          <div className="mb-4">
+            <i
+              className="pi pi-check-circle"
+              style={{
+                fontSize: "4rem",
+                color: "green",
+                marginBottom: "1rem",
+              }}
+            ></i>
+          </div>
+
           <h2
             style={{
               color: currentTheme.textColor,
-              marginBottom: "1rem",
-            }}
-          >
-            Welcome, {username || "User"}!
-          </h2>
-          <p
-            style={{
               marginBottom: "2rem",
-              color:
-                currentTheme.textColor === "#ffffff" ? "#cccccc" : "#666666",
+              fontSize: "1.5rem",
             }}
           >
-            You are logged in.
-          </p>
+            You have successfully registered.
+          </h2>
+
           <Button
-            label="Logout"
-            onClick={handleLogout}
+            label="Back to Login"
+            className="w-full"
+            onClick={() => navigate("/")}
             style={{
               backgroundColor: "transparent",
               color: currentTheme.textColor,
